@@ -11,6 +11,8 @@ export const SETTINGS_PAGES = [
   { key: 'mqtt', route: '/settings/mqtt', icon: 'mdi:transit-connection-variant', labelKey: 'config.pages.mqtt', section: 'connectivity' },
   // Needs firmware with Shelly LNM; `shelly_lnm_addr` is always present (non-empty default) there.
   { key: 'shellylnm', route: '/settings/shellylnm', icon: 'mdi:meter-electric-outline', labelKey: 'config.pages.shellylnm', section: 'connectivity', requires: 'shelly_lnm_addr' },
+  // Needs firmware with the Modbus TCP meter; `modbus_meter_port` is always present (non-zero default) there.
+  { key: 'modbusmeter', route: '/settings/modbusmeter', icon: 'mdi:meter-electric', labelKey: 'config.pages.modbusmeter', section: 'connectivity', requires: 'modbus_meter_port' },
   { key: 'ocpp', route: '/settings/ocpp', icon: 'mdi:ev-station', labelKey: 'config.pages.ocpp', section: 'connectivity' },
   // Charger
   { key: 'evse', route: '/settings/evse', icon: 'mdi:car-electric', labelKey: 'config.pages.evse', section: 'charger' },

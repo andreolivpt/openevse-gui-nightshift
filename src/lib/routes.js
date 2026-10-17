@@ -20,6 +20,7 @@ import Solar from '../routes/settings/Solar.svelte'
 import LoadSharing from '../routes/settings/LoadSharing.svelte'
 import Shaper from '../routes/settings/Shaper.svelte'
 import ShellyLnm from '../routes/settings/ShellyLnm.svelte'
+import ModbusMeter from '../routes/settings/ModbusMeter.svelte'
 import Emoncms from '../routes/settings/Emoncms.svelte'
 import Firmware from '../routes/settings/Firmware.svelte'
 import Certificates from '../routes/settings/Certificates.svelte'
@@ -66,6 +67,7 @@ routes['/settings/solar'] = Solar
 routes['/settings/loadsharing'] = LoadSharing
 routes['/settings/shaper'] = Shaper
 routes['/settings/shellylnm'] = ShellyLnm
+routes['/settings/modbusmeter'] = ModbusMeter
 routes['/settings/emoncms'] = Emoncms
 
 // System pages — override the placeholders set above.

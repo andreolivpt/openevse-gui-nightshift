@@ -9,8 +9,8 @@ describe('SETTINGS_PAGES', () => {
     expect(SETTINGS_PAGES.find((p) => p.key === 'installer').section).toBe('system')
   })
 
-  it('lists all 20 config pages', () => {
-    expect(SETTINGS_PAGES).toHaveLength(20)
+  it('lists all 21 config pages', () => {
+    expect(SETTINGS_PAGES).toHaveLength(21)
   })
   it('every page has key, route, icon, labelKey, section', () => {
     for (const p of SETTINGS_PAGES) {
@@ -72,6 +72,11 @@ describe('pagesBySection', () => {
     expect(keysFor({})).not.toContain('shellylnm')
     expect(keysFor(undefined)).not.toContain('shellylnm')
     expect(keysFor({ shelly_lnm_addr: '239.255.55.55' })).toContain('shellylnm')
+  })
+  it('gates the Modbus meter page on firmware support (modbus_meter_port)', () => {
+    const keysFor = (config) => pagesBySection(config).flatMap((g) => g.pages.map((p) => p.key))
+    expect(keysFor({})).not.toContain('modbusmeter')
+    expect(keysFor({ modbus_meter_port: 502 })).toContain('modbusmeter')
   })
   it('preserves section order', () => {
     expect(pagesBySection({}).map((g) => g.section)).toEqual(SECTIONS)

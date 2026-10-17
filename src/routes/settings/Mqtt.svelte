@@ -326,6 +326,8 @@
       </FormField>
       {#if $config_store?.shelly_lnm_enabled}
         <FormField label={$_('config.mqtt.vrms')} description={$_('config.mqtt.vrms_shelly')} />
+      {:else if $config_store?.modbus_meter_enabled}
+        <FormField label={$_('config.mqtt.vrms')} description={$_('config.mqtt.vrms_modbus')} />
       {:else}
         <FormField
           label={$_('config.mqtt.vrms')}

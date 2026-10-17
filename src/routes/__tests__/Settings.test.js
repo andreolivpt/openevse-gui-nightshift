@@ -28,7 +28,7 @@ describe('Settings hub', () => {
   it('renders a link for every config page plus the support links', () => {
     // tft_theme present so the capability-gated Display page renders too;
     // labs_enabled on so the Labs-gated Load Sharing page renders too.
-    config_store.set({ tft_theme: 'dark', shelly_lnm_addr: '239.255.55.55' }) // + firmware-gated Shelly LNM page
+    config_store.set({ tft_theme: 'dark', shelly_lnm_addr: '239.255.55.55', modbus_meter_port: 502 }) // + firmware-gated Shelly LNM / Modbus meter pages
     config_store.update((c) => ({ ...c, labs_enabled: true }))
     const { getAllByRole } = render(Settings)
     const links = getAllByRole('link')
