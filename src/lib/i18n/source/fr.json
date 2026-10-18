@@ -517,7 +517,14 @@
       "release_on_timeout": "Arrêter de limiter sans données",
       "release_on_timeout_desc": "Si aucune donnée n'arrive dans l'intervalle maximal, arrête de limiter la charge au lieu de la mettre en pause. La limitation reprend à la mesure suivante. Tant que les données manquent, rien ne limite la consommation totale de la maison.",
       "smoothing": "Lissage de l'entrée",
-      "smoothing_desc": "Constante de temps du filtre pour la mesure de puissance instantanée."
+      "smoothing_desc": "Constante de temps du filtre pour la mesure de puissance instantanée.",
+      "grid_current": "Courant réseau / limite",
+      "amps_mode": "Le courant réseau vient de l’AlphaESS : le délesteur le maintient sous la plus basse des deux limites ci-dessous.",
+      "max_cur": "Courant réseau maximal (A)",
+      "max_cur_desc": "Courant que toute la maison peut prendre au réseau. 0 = non utilisé.",
+      "max_va": "Puissance apparente maximale (VA)",
+      "max_va_desc": "Pour un abonnement limité en kVA : divisée par la tension réseau du moment (6900 VA à 235 V = 29,4 A). 0 = non utilisé.",
+      "max_power_amps_desc": "Non utilisée en limite en ampères, sauf si les deux limites ci-dessus valent 0 : elle sert alors de limite de puissance apparente."
     },
     "shellylnm": {
       "title": "Shelly LNM",
@@ -600,7 +607,14 @@
       "scale": "Multiplicateur",
       "scale_desc": "Multiplie la valeur brute pour obtenir des watts, p. ex. 1000 pour une valeur en kW.",
       "invert": "Inverser le signe",
-      "invert_desc": "Pour les appareils qui indiquent la puissance exportée en positif."
+      "invert_desc": "Pour les appareils qui indiquent la puissance exportée en positif.",
+      "mode": "Lecture",
+      "mode_desc": "Puissance réseau : un registre avec la puissance, le délesteur limite en watts. Courant AlphaESS : tension, courant et puissance d’un AlphaESS, le délesteur limite le courant réseau en ampères (limite à régler sur la page du délesteur).",
+      "mode_register": "Puissance réseau (un registre)",
+      "mode_alphaess": "Courant AlphaESS (limite en ampères)",
+      "voltage": "Tension réseau",
+      "current": "Courant réseau (négatif = injection)",
+      "apparent": "Puissance apparente"
     },
     "loadsharing": {
       "enable": "Activer le partage de charge",

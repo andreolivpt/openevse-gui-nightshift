@@ -517,7 +517,14 @@
       "release_on_timeout": "Dejar de limitar sin datos",
       "release_on_timeout_desc": "Si no llegan datos en directo dentro del intervalo máximo, deja de limitar la carga en lugar de pausarla. La limitación se reanuda con la siguiente lectura. Mientras faltan los datos, nada limita el consumo total de la casa.",
       "smoothing": "Suavizado de entrada",
-      "smoothing_desc": "Constante de tiempo del filtro para la lectura de potencia en vivo."
+      "smoothing_desc": "Constante de tiempo del filtro para la lectura de potencia en vivo.",
+      "grid_current": "Corriente de red / límite",
+      "amps_mode": "La corriente de red viene del AlphaESS: el limitador la mantiene por debajo del menor de los dos límites siguientes.",
+      "max_cur": "Corriente máxima de red (A)",
+      "max_cur_desc": "Corriente que toda la casa puede tomar de la red. 0 = no se usa.",
+      "max_va": "Potencia aparente máxima (VA)",
+      "max_va_desc": "Para un suministro limitado en kVA: se divide por la tensión de red del momento (6900 VA a 235 V = 29,4 A). 0 = no se usa.",
+      "max_power_amps_desc": "No se usa al limitar en amperios, salvo si los dos límites anteriores son 0: entonces se toma como límite de potencia aparente."
     },
     "shellylnm": {
       "title": "Shelly LNM",
@@ -600,7 +607,14 @@
       "scale": "Multiplicador",
       "scale_desc": "Multiplica el valor bruto para obtener vatios, p. ej. 1000 para un valor en kW.",
       "invert": "Invertir signo",
-      "invert_desc": "Para dispositivos que indican la potencia exportada como positiva."
+      "invert_desc": "Para dispositivos que indican la potencia exportada como positiva.",
+      "mode": "Lectura",
+      "mode_desc": "Potencia de red: un registro con la potencia, el limitador de carga limita en vatios. Corriente AlphaESS: tensión, corriente y potencia de un AlphaESS, el limitador limita la corriente de red en amperios (el límite se fija en la página del limitador).",
+      "mode_register": "Potencia de red (un registro)",
+      "mode_alphaess": "Corriente AlphaESS (límite en amperios)",
+      "voltage": "Tensión de red",
+      "current": "Corriente de red (negativa = exportación)",
+      "apparent": "Potencia aparente"
     },
     "loadsharing": {
       "enable": "Activar el reparto de carga",

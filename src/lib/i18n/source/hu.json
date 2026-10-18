@@ -517,7 +517,14 @@
       "release_on_timeout": "Korlátozás leállítása adatok nélkül",
       "release_on_timeout_desc": "Ha a maximális időközön belül nem érkezik élő adat, a töltést nem szünetelteti, hanem nem korlátozza tovább. A korlátozás a következő méréssel folytatódik. Amíg nincs adat, semmi sem korlátozza a ház teljes fogyasztását.",
       "smoothing": "Bemeneti simítás",
-      "smoothing_desc": "Az élő teljesítmény leolvasás szűrőjének időállandója."
+      "smoothing_desc": "Az élő teljesítmény leolvasás szűrőjének időállandója.",
+      "grid_current": "Hálózati áram / korlát",
+      "amps_mode": "A hálózati áram az AlphaESS-ből jön: a korlátozó az alábbi két korlát közül az alacsonyabb alatt tartja.",
+      "max_cur": "Max. hálózati áram (A)",
+      "max_cur_desc": "Az egész ház által a hálózatból vehető áram. 0 = nincs használva.",
+      "max_va": "Max. látszólagos teljesítmény (VA)",
+      "max_va_desc": "kVA-ban korlátozott bekötéshez: az aktuális hálózati feszültséggel osztva (6900 VA 235 V-on = 29,4 A). 0 = nincs használva.",
+      "max_power_amps_desc": "Amperes korlátozásnál nincs használva, kivéve ha mindkét fenti korlát 0: ekkor látszólagos teljesítménykorlátként szolgál."
     },
     "shellylnm": {
       "title": "Shelly LNM",
@@ -600,7 +607,14 @@
       "scale": "Szorzó",
       "scale_desc": "A nyers értéket szorozza wattra, pl. 1000 kW-ban megadott értéknél.",
       "invert": "Előjel megfordítása",
-      "invert_desc": "Olyan eszközökhöz, amelyek az exportot pozitívként jelzik."
+      "invert_desc": "Olyan eszközökhöz, amelyek az exportot pozitívként jelzik.",
+      "mode": "Olvasás",
+      "mode_desc": "Hálózati teljesítmény: egy regiszter a teljesítménnyel, a terheléskorlátozó wattban korlátoz. AlphaESS áram: feszültség, áram és teljesítmény egy AlphaESS-ből, a terheléskorlátozó a hálózati áramot korlátozza amperben (a korlát a terheléskorlátozó oldalán állítható).",
+      "mode_register": "Hálózati teljesítmény (egy regiszter)",
+      "mode_alphaess": "AlphaESS áram (korlát amperben)",
+      "voltage": "Hálózati feszültség",
+      "current": "Hálózati áram (negatív = betáplálás)",
+      "apparent": "Látszólagos teljesítmény"
     },
     "loadsharing": {
       "enable": "Terheléselosztás bekapcsolása",

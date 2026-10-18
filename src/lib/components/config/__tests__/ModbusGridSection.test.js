@@ -67,4 +67,30 @@ describe('Modbus grid section', () => {
     await fireEvent.change(getByDisplayValue('int32'), { target: { value: 'float32' } })
     expect(form.saveField).toHaveBeenCalledWith('modbus_grid_format', 'float32')
   })
+
+  it('has no mode choice on firmware without the AlphaESS mode', () => {
+    const { queryByText } = render(ModbusGridSection, { form: makeForm() })
+    expect(queryByText('config.modbusgrid.mode')).not.toBeInTheDocument()
+  })
+
+  it('switches to the AlphaESS mode', async () => {
+    config_store.set({ ...base, modbus_grid_mode: 'register' })
+    const form = makeForm()
+    const { getByDisplayValue } = render(ModbusGridSection, { form })
+    await fireEvent.change(getByDisplayValue('config.modbusgrid.mode_register'), { target: { value: 'alphaess' } })
+    expect(form.saveField).toHaveBeenCalledWith('modbus_grid_mode', 'alphaess')
+  })
+
+  it('shows voltage, current and apparent power in AlphaESS mode, without the register block', () => {
+    config_store.set({ ...base, modbus_grid_mode: 'alphaess' })
+    status_store.set({
+      modbus_grid_connected: 1, modbus_grid_data_age: 900, modbus_grid_power: -7,
+      modbus_grid_voltage: 235, modbus_grid_current: -0.0298, modbus_grid_apparent: 423, modbus_grid_errors: 0,
+    })
+    const { getByText, queryByText } = render(ModbusGridSection, { form: makeForm() })
+    expect(getByText('235 V')).toBeInTheDocument()
+    expect(getByText('0.0 A')).toBeInTheDocument()
+    expect(getByText('423 VA')).toBeInTheDocument()
+    expect(queryByText('config.modbusgrid.register')).not.toBeInTheDocument()
+  })
 })

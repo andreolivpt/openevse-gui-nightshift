@@ -14,6 +14,17 @@
 
   const form = createConfigForm()
   const ss = form.saveState
+
+  // Limiting in amps: the Modbus grid source reads an AlphaESS (firmware
+  // with current_shaper_max_cur only)
+  let ampsMode = $derived(
+    $config_store?.current_shaper_max_cur !== undefined &&
+      !!$config_store?.modbus_grid_enabled &&
+      $config_store?.modbus_grid_mode === 'alphaess'
+  )
+  const num = (v) => typeof v === 'number' && Number.isFinite(v)
+  let liveCur = $derived($status_store?.shaper_live_cur)
+  let curLimit = $derived($status_store?.shaper_grid_cur_limit)
 </script>
 
 <ConfigPage title={$_('config.pages.shaper')}>
@@ -33,11 +44,52 @@
       tone={$status_store?.shaper_updated ? 'ok' : 'error'}
     />
     <ReadOnlyRow label={$_('config.shaper.live_power')} value={`${$status_store?.shaper_live_pwr ?? 0} W`} />
+    {#if num(liveCur)}
+      <ReadOnlyRow
+        label={$_('config.shaper.grid_current')}
+        value={num(curLimit) ? `${liveCur.toFixed(1)} A / ${curLimit.toFixed(1)} A` : `${liveCur.toFixed(1)} A`}
+      />
+    {/if}
     <ReadOnlyRow label={$_('config.shaper.available')} value={`${$status_store?.shaper_cur ?? 0} A`} />
   </ConfigSection>
 
   <ConfigSection title={$_('config.shaper.settings')}>
-    <FormField label={$_('config.shaper.max_power')} status={$ss.current_shaper_max_pwr ?? 'idle'}>
+    {#if ampsMode}
+      <p class="mb-2 text-sm text-text-dim">{$_('config.shaper.amps_mode')}</p>
+      <FormField
+        label={$_('config.shaper.max_cur')}
+        description={$_('config.shaper.max_cur_desc')}
+        status={$ss.current_shaper_max_cur ?? 'idle'}
+      >
+        <NumberInput
+          value={$config_store?.current_shaper_max_cur ?? null}
+          min={0}
+          max={500}
+          placeholder="29"
+          revert={form.revert}
+          onchange={(v) => form.saveField('current_shaper_max_cur', v)}
+        />
+      </FormField>
+      <FormField
+        label={$_('config.shaper.max_va')}
+        description={$_('config.shaper.max_va_desc')}
+        status={$ss.current_shaper_max_va ?? 'idle'}
+      >
+        <NumberInput
+          value={$config_store?.current_shaper_max_va ?? null}
+          min={0}
+          max={100000}
+          placeholder="6900"
+          revert={form.revert}
+          onchange={(v) => form.saveField('current_shaper_max_va', v)}
+        />
+      </FormField>
+    {/if}
+    <FormField
+      label={$_('config.shaper.max_power')}
+      description={ampsMode ? $_('config.shaper.max_power_amps_desc') : undefined}
+      status={$ss.current_shaper_max_pwr ?? 'idle'}
+    >
       <NumberInput
         value={$config_store?.current_shaper_max_pwr ?? null}
         placeholder="9000"

@@ -32,6 +32,17 @@
   let errors = $derived($status_store?.modbus_grid_errors ?? 0)
   let lastError = $derived($status_store?.modbus_grid_last_error)
   let shaperOn = $derived(!!$config_store?.current_shaper_enabled)
+  // Firmware without the AlphaESS mode has no modbus_grid_mode
+  let hasMode = $derived($config_store?.modbus_grid_mode !== undefined)
+  let alphaess = $derived($config_store?.modbus_grid_mode === 'alphaess')
+  let modes = $derived([
+    { value: 'register', label: $_('config.modbusgrid.mode_register') },
+    { value: 'alphaess', label: $_('config.modbusgrid.mode_alphaess') }
+  ])
+  let voltage = $derived($status_store?.modbus_grid_voltage)
+  let current = $derived($status_store?.modbus_grid_current)
+  let apparent = $derived($status_store?.modbus_grid_apparent)
+  const num = (v) => typeof v === 'number' && Number.isFinite(v)
 </script>
 
 <ConfigSection title={$_('config.modbusgrid.title')}>
@@ -55,8 +66,22 @@
     />
     <ReadOnlyRow
       label={$_('config.modbusgrid.power')}
-      value={typeof power === 'number' && Number.isFinite(power) ? `${Math.round(power)} W` : '—'}
+      value={num(power) ? `${Math.round(power)} W` : '—'}
     />
+    {#if alphaess}
+      <ReadOnlyRow
+        label={$_('config.modbusgrid.voltage')}
+        value={num(voltage) ? `${Math.round(voltage)} V` : '—'}
+      />
+      <ReadOnlyRow
+        label={$_('config.modbusgrid.current')}
+        value={num(current) ? `${(Math.abs(current) < 0.05 ? 0 : current).toFixed(1)} A` : '—'}
+      />
+      <ReadOnlyRow
+        label={$_('config.modbusgrid.apparent')}
+        value={num(apparent) ? `${Math.round(apparent)} VA` : '—'}
+      />
+    {/if}
     <ReadOnlyRow
       label={$_('config.modbusmeter.errors')}
       value={lastError ? `${errors} (${lastError})` : `${errors}`}
@@ -106,10 +131,19 @@
         onchange={(v) => form.saveField('modbus_grid_interval', v)}
       />
     </FormField>
+    {#if hasMode}
+      <FormField label={$_('config.modbusgrid.mode')} description={$_('config.modbusgrid.mode_desc')} status={$ss.modbus_grid_mode ?? 'idle'}>
+        <Select
+          options={modes}
+          value={$config_store?.modbus_grid_mode ?? 'register'}
+          onchange={(v) => form.saveField('modbus_grid_mode', v)}
+        />
+      </FormField>
+    {/if}
   {/if}
 </ConfigSection>
 
-{#if enabled}
+{#if enabled && !alphaess}
   <ConfigSection title={$_('config.modbusgrid.advanced')}>
     <p class="mb-2 text-xs text-text-dim">{$_('config.modbusgrid.advanced_desc')}</p>
     <FormField label={$_('config.modbusgrid.register')} description={$_('config.modbusgrid.register_desc')} status={$ss.modbus_grid_register ?? 'idle'}>
