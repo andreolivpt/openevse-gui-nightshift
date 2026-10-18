@@ -20,6 +20,7 @@
   import Select from '../../lib/components/ui/Select.svelte'
   import NumberInput from '../../lib/components/ui/NumberInput.svelte'
   import TempProtectionCard from '../../lib/components/charge_manager/TempProtectionCard.svelte'
+  import VoltageThrottleSection from '../../lib/components/config/VoltageThrottleSection.svelte'
 
   const form = createConfigForm()
   const ss = form.saveState
@@ -201,5 +202,10 @@
       onThrottleChange={(v) => form.saveField('temp_throttle_setpoint', v)}
       onPanicChange={(v) => form.saveField('over_temp_shutdown', v)}
     />
+  {/if}
+
+  <!-- Firmware with the low voltage throttle always reports voltage_throttle_low -->
+  {#if $config_store?.voltage_throttle_low !== undefined}
+    <VoltageThrottleSection {form} />
   {/if}
 </ConfigPage>
