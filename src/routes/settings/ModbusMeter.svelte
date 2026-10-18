@@ -11,6 +11,7 @@
   import TextInput from '../../lib/components/ui/TextInput.svelte'
   import NumberInput from '../../lib/components/ui/NumberInput.svelte'
   import Toggle from '../../lib/components/ui/Toggle.svelte'
+  import ModbusGridSection from '../../lib/components/config/ModbusGridSection.svelte'
 
   const form = createConfigForm()
   const ss = form.saveState
@@ -160,5 +161,10 @@
       <p class="mb-2 text-sm text-text-dim">{$_('config.modbusmeter.setup_desc')}</p>
       <p class="text-xs text-text-dim">{$_('config.modbusmeter.shelly_note')}</p>
     </ConfigSection>
+  {/if}
+
+  <!-- Firmware with the Modbus grid power source always reports modbus_grid_port -->
+  {#if $config_store?.modbus_grid_port !== undefined}
+    <ModbusGridSection {form} />
   {/if}
 </ConfigPage>

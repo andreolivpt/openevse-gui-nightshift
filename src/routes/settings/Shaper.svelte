@@ -10,6 +10,7 @@
   import ReadOnlyRow from '../../lib/components/config/ReadOnlyRow.svelte'
   import TextInput from '../../lib/components/ui/TextInput.svelte'
   import NumberInput from '../../lib/components/ui/NumberInput.svelte'
+  import Toggle from '../../lib/components/ui/Toggle.svelte'
 
   const form = createConfigForm()
   const ss = form.saveState
@@ -46,6 +47,8 @@
     </FormField>
     {#if $config_store?.shelly_lnm_enabled}
       <FormField label={$_('config.shaper.live_topic')} description={$_('config.shaper.live_shelly')} />
+    {:else if $config_store?.modbus_grid_enabled}
+      <FormField label={$_('config.shaper.live_topic')} description={$_('config.shaper.live_modbus')} />
     {:else}
       <FormField label={$_('config.shaper.live_topic')} status={$ss.mqtt_live_pwr ?? 'idle'}>
         <TextInput
@@ -80,6 +83,18 @@
         onchange={(v) => form.saveField('current_shaper_data_maxinterval', v)}
       />
     </FormField>
+    {#if $config_store?.current_shaper_release_on_timeout !== undefined}
+      <FormField
+        label={$_('config.shaper.release_on_timeout')}
+        description={$_('config.shaper.release_on_timeout_desc')}
+      >
+        <Toggle
+          checked={!!$config_store?.current_shaper_release_on_timeout}
+          label={$_('config.shaper.release_on_timeout')}
+          onchange={(v) => form.saveField('current_shaper_release_on_timeout', v)}
+        />
+      </FormField>
+    {/if}
     <FormField
       label={$_('config.shaper.smoothing')}
       description={$_('config.shaper.smoothing_desc')}
