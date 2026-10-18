@@ -616,6 +616,19 @@
       "current": "Hálózati áram (negatív = betáplálás)",
       "apparent": "Látszólagos teljesítmény"
     },
+    "voltagedrop": {
+      "title": "Feszültségesés a töltőig",
+      "desc": "A betáplálási feszültség (AlphaESS) a töltő áramkörének feszültségéhez (Modbus TCP mérő) képest. Mindkét mérő kell, a hálózati forrás AlphaESS módban.",
+      "unavailable": "Friss leolvasásra vár mindkét mérőtől.",
+      "grid": "Betáplálási feszültség",
+      "charger": "Töltő feszültsége",
+      "drop": "Feszültségesés",
+      "offset": "Mérők eltérése (terhelés nélkül)",
+      "resistance": "Kábel ellenállása",
+      "loss": "Veszteség a kábelen",
+      "at_max": "Esés {amps} A-nél",
+      "learning": "tanulás…"
+    },
     "loadsharing": {
       "enable": "Terheléselosztás bekapcsolása",
       "settings": "Terheléselosztás beállításai",

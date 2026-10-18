@@ -616,6 +616,19 @@
       "current": "Corriente de red (negativa = exportación)",
       "apparent": "Potencia aparente"
     },
+    "voltagedrop": {
+      "title": "Caída de tensión hasta el cargador",
+      "desc": "Tensión de entrada (AlphaESS) frente a la tensión en el circuito del cargador (contador Modbus TCP). Requiere ambos contadores y la fuente de red en modo AlphaESS.",
+      "unavailable": "Esperando lecturas recientes de ambos contadores.",
+      "grid": "Tensión de entrada",
+      "charger": "Tensión en el cargador",
+      "drop": "Caída de tensión",
+      "offset": "Desfase entre contadores (sin carga)",
+      "resistance": "Resistencia del cable",
+      "loss": "Pérdida en el cable",
+      "at_max": "Caída a {amps} A",
+      "learning": "aprendiendo…"
+    },
     "loadsharing": {
       "enable": "Activar el reparto de carga",
       "settings": "Ajustes de reparto de carga",

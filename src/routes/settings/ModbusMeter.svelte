@@ -12,6 +12,7 @@
   import NumberInput from '../../lib/components/ui/NumberInput.svelte'
   import Toggle from '../../lib/components/ui/Toggle.svelte'
   import ModbusGridSection from '../../lib/components/config/ModbusGridSection.svelte'
+  import VoltageDropSection from '../../lib/components/config/VoltageDropSection.svelte'
 
   const form = createConfigForm()
   const ss = form.saveState
@@ -166,5 +167,9 @@
   <!-- Firmware with the Modbus grid power source always reports modbus_grid_port -->
   {#if $config_store?.modbus_grid_port !== undefined}
     <ModbusGridSection {form} />
+  {/if}
+
+  {#if $status_store?.voltage_drop_available !== undefined}
+    <VoltageDropSection />
   {/if}
 </ConfigPage>

@@ -616,6 +616,19 @@
       "current": "Grid current (negative = export)",
       "apparent": "Apparent power"
     },
+    "voltagedrop": {
+      "title": "Voltage drop to the charger",
+      "desc": "Entrance voltage (AlphaESS) against the voltage on the charger circuit (Modbus TCP meter). Needs both meters, the grid power source in AlphaESS mode.",
+      "unavailable": "Waiting for fresh readings from both meters.",
+      "grid": "Entrance voltage",
+      "charger": "Charger voltage",
+      "drop": "Voltage drop",
+      "offset": "Meter offset (no load)",
+      "resistance": "Cable resistance",
+      "loss": "Loss in the cable",
+      "at_max": "Drop at {amps} A",
+      "learning": "learning…"
+    },
     "loadsharing": {
       "enable": "Enable load sharing",
       "settings": "Load sharing settings",

@@ -616,6 +616,19 @@
       "current": "Courant réseau (négatif = injection)",
       "apparent": "Puissance apparente"
     },
+    "voltagedrop": {
+      "title": "Chute de tension jusqu’à la borne",
+      "desc": "Tension d’entrée (AlphaESS) comparée à la tension du circuit de la borne (compteur Modbus TCP). Nécessite les deux compteurs, la source réseau en mode AlphaESS.",
+      "unavailable": "En attente de lectures récentes des deux compteurs.",
+      "grid": "Tension d’entrée",
+      "charger": "Tension à la borne",
+      "drop": "Chute de tension",
+      "offset": "Écart entre compteurs (à vide)",
+      "resistance": "Résistance du câble",
+      "loss": "Perte dans le câble",
+      "at_max": "Chute à {amps} A",
+      "learning": "apprentissage…"
+    },
     "loadsharing": {
       "enable": "Activer le partage de charge",
       "settings": "Paramètres du partage de charge",
