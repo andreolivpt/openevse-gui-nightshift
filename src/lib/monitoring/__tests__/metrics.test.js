@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   round, energyMetrics, sensorMetrics, serviceMetrics, vehicleMetrics,
-  showVehicle, countSeverity, safetyData, claimRows,
+  showVehicle, countSeverity, safetyData, freshCount, claimRows,
   homeBatteryMetrics, showHomeBattery, cableTempMetrics, showCableTemp,
 } from '../metrics.js'
 
@@ -101,6 +101,19 @@ describe('safetyData', () => {
     expect(d.errors.find((r) => r.key === 'gfci').severity).toBe('ok')
     expect(d.errors.find((r) => r.key === 'noground').severity).toBe('error')
     expect(d.infos[0]).toMatchObject({ key: 'switches', count: 19, severity: 'ok' })
+  })
+  it('shows counts marked as seen as history, and only later trips as errors', () => {
+    const cfg = { fault_gfci_seen: 2, fault_noground_seen: 33, fault_stuck_seen: 0 }
+    const d = safetyData({ gfcicount: 2, nogndcount: 34, stuckcount: 0 }, false, cfg)
+    const row = (k) => d.errors.find((r) => r.key === k)
+    expect(row('gfci')).toMatchObject({ count: 2, fresh: 0, severity: 'muted' })
+    expect(row('noground')).toMatchObject({ count: 34, fresh: 1, severity: 'error' })
+    expect(row('stuck')).toMatchObject({ count: 0, severity: 'ok' })
+  })
+  it('treats counters below the seen value as cleared since', () => {
+    expect(freshCount(1, 33)).toBe(1)
+    expect(freshCount(33, 33)).toBe(0)
+    expect(freshCount(5, undefined)).toBe(5)
   })
   it('prepends a fault row carrying the state code when faulted', () => {
     const d = safetyData({ state: 8, gfcicount: 0, nogndcount: 0, stuckcount: 0 }, true)

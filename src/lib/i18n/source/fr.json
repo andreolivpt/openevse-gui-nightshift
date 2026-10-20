@@ -1375,7 +1375,11 @@
         "reset_done": "Réinitialisé"
       },
       "maintenance": {
-        "title": "Maintenance"
+        "title": "Maintenance",
+        "mark_seen": "Marquer les compteurs de défauts comme vus",
+        "marking": "Enregistrement…",
+        "mark_seen_done": "Marqués comme vus",
+        "mark_seen_desc": "Ce contrôleur ne peut pas remettre à zéro ses compteurs de défauts. Les marquer comme vus les garde comme historique : seuls les déclenchements suivants apparaissent en erreur et génèrent une notification."
       }
     },
     "manager": {

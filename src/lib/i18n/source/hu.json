@@ -1375,7 +1375,11 @@
         "reset_done": "Visszaállítva"
       },
       "maintenance": {
-        "title": "Karbantartás"
+        "title": "Karbantartás",
+        "mark_seen": "Hibaszámlálók megjelölése látottként",
+        "marking": "Mentés…",
+        "mark_seen_done": "Látottként megjelölve",
+        "mark_seen_desc": "Ez a vezérlő nem tudja nullázni a hibaszámlálóit. Látottként megjelölve előzményként maradnak meg: csak a későbbi kioldások jelennek meg hibaként és adnak értesítést."
       }
     },
     "manager": {

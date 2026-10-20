@@ -178,19 +178,31 @@ export function countSeverity(count, warning, alert) {
   return 'ok'
 }
 
-/** Build the Safety-tab rows. The fault row carries `state` for getStateDesc. */
-export function safetyData(status, hasError) {
+/** Trips since a counter was marked as seen; a count below the seen value
+ * means the controller counters were cleared since, so every trip is new. */
+export function freshCount(count, seen) {
+  const n = Number(count) || 0
+  const base = Number(seen)
+  if (!Number.isFinite(base) || base <= 0) return n
+  return n >= base ? n - base : n
+}
+
+/** Build the Safety-tab rows. The fault row carries `state` for getStateDesc.
+ * A counter row is an error only for trips after the counts were marked as
+ * seen (config fault_*_seen); older ones show muted, as history. */
+export function safetyData(status, hasError, config) {
   const s = status ?? {}
-  const countRow = (key, count) => ({
-    key,
-    count: count ?? 0,
-    severity: (count ?? 0) === 0 ? 'ok' : 'error',
-  })
+  const c = config ?? {}
+  const countRow = (key, count, seen) => {
+    const n = count ?? 0
+    const fresh = freshCount(n, seen)
+    return { key, count: n, fresh, severity: n === 0 ? 'ok' : fresh > 0 ? 'error' : 'muted' }
+  }
   const errors = []
   if (hasError) errors.push({ key: 'fault', state: s.state, severity: 'error' })
-  errors.push(countRow('gfci', s.gfcicount))
-  errors.push(countRow('noground', s.nogndcount))
-  errors.push(countRow('stuck', s.stuckcount))
+  errors.push(countRow('gfci', s.gfcicount, c.fault_gfci_seen))
+  errors.push(countRow('noground', s.nogndcount, c.fault_noground_seen))
+  errors.push(countRow('stuck', s.stuckcount, c.fault_stuck_seen))
   const switches = s.total_switches ?? 0
   const infos = [{ key: 'switches', count: switches, severity: countSeverity(switches, 20000, 40000) }]
   return { errors, infos }

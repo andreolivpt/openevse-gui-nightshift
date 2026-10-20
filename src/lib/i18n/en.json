@@ -1375,7 +1375,11 @@
         "reset_done": "Reset done"
       },
       "maintenance": {
-        "title": "Maintenance"
+        "title": "Maintenance",
+        "mark_seen": "Mark fault counts as seen",
+        "marking": "Saving…",
+        "mark_seen_done": "Marked as seen",
+        "mark_seen_desc": "This controller cannot clear its fault counters. Marking them as seen keeps the counts as history: only later trips show as errors and raise a notification."
       }
     },
     "manager": {

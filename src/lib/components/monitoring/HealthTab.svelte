@@ -15,13 +15,48 @@
     ok: 'bg-accent/15 text-accent',
     warning: 'bg-warning/15 text-warning',
     error: 'bg-error/15 text-error',
+    muted: 'bg-surface-3 text-text-dim',
   }
 
   function rowLabel(row) {
     return $_('monitoring.safety.' + row.key)
   }
   function rowValue(row) {
-    return row.key === 'fault' ? $_(getStateDesc(row.state)) : row.count
+    if (row.key === 'fault') return $_(getStateDesc(row.state))
+    // Older trips marked as seen stay visible; the new ones are called out
+    return row.fresh > 0 && row.fresh !== row.count ? `${row.count} (+${row.fresh})` : row.count
+  }
+
+  // The fault counters can only be cleared on D9 controllers ($FC). Marking
+  // them as seen works everywhere: only later trips count as new.
+  let canClear = $derived(!!$config_store?.d9_support)
+  let canMarkSeen = $derived(
+    $config_store?.fault_gfci_seen !== undefined && data.errors.some((r) => r.fresh > 0)
+  )
+  let marking = $state(false)
+  let markDone = $state(false)
+
+  async function markFaultsSeen() {
+    if (marking) return
+    marking = true
+    markDone = false
+    try {
+      const seen = {
+        fault_gfci_seen: $status_store?.gfcicount ?? 0,
+        fault_noground_seen: $status_store?.nogndcount ?? 0,
+        fault_stuck_seen: $status_store?.stuckcount ?? 0,
+      }
+      const ok = await serialQueue.add(() => config_store.upload(seen))
+      if (ok) {
+        config_store.update((c) => ({ ...c, ...seen }))
+        markDone = true
+        setTimeout(() => (markDone = false), 3000)
+      } else {
+        showWriteError()
+      }
+    } finally {
+      marking = false
+    }
   }
 
   let resetting = $state(false)
@@ -128,9 +163,24 @@
   </Card>
 {/if}
 
+{#if canMarkSeen || markDone || canClear || relay}
 <Card class="p-3">
   <h2 class="mb-1 text-sm font-semibold text-text">{$_('monitoring.health.maintenance.title')}</h2>
   <div class="flex flex-col gap-2 pt-2">
+    {#if canMarkSeen || markDone}
+      <p class="text-xs text-text-dim">{$_('monitoring.health.maintenance.mark_seen_desc')}</p>
+      <Button
+        label={marking
+          ? $_('monitoring.health.maintenance.marking')
+          : markDone
+            ? $_('monitoring.health.maintenance.mark_seen_done')
+            : $_('monitoring.health.maintenance.mark_seen')}
+        variant={markDone ? 'ghost' : 'primary'}
+        disabled={marking}
+        onclick={markFaultsSeen}
+      />
+    {/if}
+    {#if canClear}
     <Button
       label={resetting
         ? $_('config.safety.resetting')
@@ -141,6 +191,7 @@
       disabled={resetting}
       onclick={resetFaultCounters}
     />
+    {/if}
     {#if relay}
       <Button
         label={resettingRelay
@@ -155,3 +206,4 @@
     {/if}
   </div>
 </Card>
+{/if}

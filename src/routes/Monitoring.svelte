@@ -70,7 +70,7 @@
       : []),
     { group: serviceMetrics($status_store, $config_store), expanded: desktop },
   ])
-  let safety = $derived(safetyData($status_store, hasError))
+  let safety = $derived(safetyData($status_store, hasError, $config_store))
   let relayHealth = $derived(relayHealthData($config_store))
 
   let tabs = $derived([

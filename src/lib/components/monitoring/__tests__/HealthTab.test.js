@@ -9,6 +9,8 @@ vi.mock('svelte-i18n', () => {
 vi.mock('../../../api/httpAPI.js', () => ({ httpAPI: vi.fn(() => Promise.resolve({ msg: 'done' })) }))
 
 import { httpAPI } from '../../../api/httpAPI.js'
+import { config_store } from '../../../stores/config.js'
+import { status_store } from '../../../stores/status.js'
 import HealthTab from '../HealthTab.svelte'
 
 describe('HealthTab', () => {
@@ -42,6 +44,7 @@ describe('HealthTab', () => {
 
   it('resets the fault counters via $FC when the reset button is clicked', async () => {
     httpAPI.mockClear()
+    config_store.set({ d9_support: true })
     const { getByText } = render(HealthTab, { props: { data: { errors: [], infos: [] } } })
     await fireEvent.click(getByText('config.safety.reset_faults'))
     await vi.waitFor(() => {
@@ -91,6 +94,7 @@ describe('HealthTab', () => {
     })
   })
   it('groups both reset buttons in the Maintenance section at the bottom', () => {
+    config_store.set({ d9_support: true })
     const relay = [{ key: 'life_pct', value: 100, severity: 'ok' }]
     const { getByText, container } = render(HealthTab, { props: { data: { errors: [], infos: [] }, relay } })
     const title = getByText('monitoring.health.maintenance.title')
@@ -101,9 +105,56 @@ describe('HealthTab', () => {
   })
 
   it('hides the relay reset button but keeps the fault reset when relay data is absent', () => {
+    config_store.set({ d9_support: true })
     const { getByText, queryByText } = render(HealthTab, { props: { data: { errors: [], infos: [] } } })
     expect(getByText('monitoring.health.maintenance.title')).toBeInTheDocument()
     expect(getByText('config.safety.reset_faults')).toBeInTheDocument()
     expect(queryByText('monitoring.health.relay.reset_button')).not.toBeInTheDocument()
+  })
+
+  it('hides the reset button on controllers that cannot clear the counters', () => {
+    config_store.set({ d9_support: false })
+    const { queryByText } = render(HealthTab, { props: { data: { errors: [], infos: [] } } })
+    expect(queryByText('config.safety.reset_faults')).not.toBeInTheDocument()
+  })
+
+  it('shows a count marked as seen with its new trips', () => {
+    config_store.set({ d9_support: false, fault_gfci_seen: 2 })
+    const data = {
+      errors: [{ key: 'gfci', count: 3, fresh: 1, severity: 'error' }],
+      infos: [],
+    }
+    const { getByText } = render(HealthTab, { props: { data } })
+    expect(getByText('3 (+1)')).toBeInTheDocument()
+  })
+
+  it('marks the current counts as seen', async () => {
+    httpAPI.mockClear()
+    config_store.set({ d9_support: false, fault_gfci_seen: 0, fault_noground_seen: 0, fault_stuck_seen: 0 })
+    status_store.set({ gfcicount: 2, nogndcount: 33, stuckcount: 0 })
+    const data = {
+      errors: [
+        { key: 'gfci', count: 2, fresh: 2, severity: 'error' },
+        { key: 'noground', count: 33, fresh: 33, severity: 'error' },
+        { key: 'stuck', count: 0, fresh: 0, severity: 'ok' },
+      ],
+      infos: [],
+    }
+    const { getByText } = render(HealthTab, { props: { data } })
+    await fireEvent.click(getByText('monitoring.health.maintenance.mark_seen'))
+    await vi.waitFor(() => {
+      expect(httpAPI).toHaveBeenCalledWith(
+        'POST',
+        '/config',
+        JSON.stringify({ fault_gfci_seen: 2, fault_noground_seen: 33, fault_stuck_seen: 0 }),
+      )
+    })
+  })
+
+  it('offers no marking on firmware without the seen counts', () => {
+    config_store.set({ d9_support: false })
+    const data = { errors: [{ key: 'gfci', count: 2, fresh: 2, severity: 'error' }], infos: [] }
+    const { queryByText } = render(HealthTab, { props: { data } })
+    expect(queryByText('monitoring.health.maintenance.mark_seen')).not.toBeInTheDocument()
   })
 })
